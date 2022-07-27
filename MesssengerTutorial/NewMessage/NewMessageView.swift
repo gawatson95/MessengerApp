@@ -12,25 +12,38 @@ struct NewMessageView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: LoginVM
     
+    @State var didSelectNewUser: (ChatUser) -> ()
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 ForEach(vm.users) { user in
                     VStack(alignment: .leading) {
-                        HStack {
-                            KFImage(URL(string: user.profileImageUrl))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(.primary, lineWidth: 1)
-                                )
-                            
-                            Text(user.email)
+                        Button {
+                            dismiss()
+                            didSelectNewUser(user)
+                        } label: {
+                            HStack {
+                                KFImage(URL(string: user.profileImageUrl))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .stroke(.primary, lineWidth: 1)
+                                    )
+                                
+                                VStack(alignment: .leading) {
+                                    Text(user.username)
+                                        .bold()
+                                    Text(user.email)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .padding()
+                            .foregroundColor(.black)
                         }
-                        .padding()
                         
                         Divider()
                     }
@@ -55,7 +68,8 @@ struct NewMessageView: View {
 
 struct NewMessageView_Previews: PreviewProvider {
     static var previews: some View {
-        NewMessageView()
+//        NewMessageView()
+        ContentView()
             .environmentObject(LoginVM())
     }
 }

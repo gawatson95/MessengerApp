@@ -12,8 +12,10 @@ struct MainMessagesView: View {
     
     @EnvironmentObject var vm: LoginVM
     
+    @State private var chatUser: ChatUser?
     @State private var shouldShowLogOutOptions: Bool = false
     @State private var shouldShowNewMessageScreen: Bool = false
+    @State private var shouldNavToChatLog: Bool = false
     
     var body: some View {
         NavigationView {
@@ -24,6 +26,12 @@ struct MainMessagesView: View {
                 Divider()
                 
                 messagesView
+                
+                NavigationLink("", isActive: $shouldNavToChatLog) {
+                    if let chatUser = chatUser {
+                        ChatLogView(user: chatUser)
+                    }
+                }
             }
             .navigationBarHidden(true)
         }
@@ -137,7 +145,10 @@ extension MainMessagesView {
             }
         }
         .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
-            NewMessageView()
+            NewMessageView { user in
+                self.shouldNavToChatLog.toggle()
+                self.chatUser = user
+            }
         }
     }
 }
