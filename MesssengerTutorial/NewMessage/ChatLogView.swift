@@ -11,6 +11,7 @@ struct ChatLogView: View {
     
     var user: ChatUser?
     @State private var messageText: String = ""
+    @State private var dynamicHeight: CGFloat = 0.0
     
     var body: some View {
         if let user = user {
@@ -52,29 +53,61 @@ struct ChatLogView: View {
                             .foregroundColor(.gray)
                     }
 
-                    ZStack {
-                        TextEditor(text: $messageText)
-                            .padding(6)
-                            .padding(.leading, 5)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(10)
-                            .frame(maxWidth: .infinity)
-//                            .frame(height: messageText.isEmpty ? 35 : nil)
+//                    GeometryReader { geo in
+//                        ZStack {
+//                            TextEditor(text: $messageText)
+//                                .padding(6)
+//                                .padding(.leading, 5)
+//                                //.multilineTextAlignment(.leading)
+//                                .lineLimit(10)
+//                                .frame(maxWidth: .infinity)
+//                                .frame(height: messageText.isEmpty ? 35 : dynamicHeight)
+//
+//                            Text(messageText).opacity(0.0).padding()
+//
+//
+//                            if messageText.isEmpty {
+//                                Text("Message")
+//                                    .padding(.leading)
+//                                    .frame(maxWidth: .infinity, alignment: .leading)
+//                                    .foregroundColor(Color.gray.opacity(0.3))
+//                                    .allowsHitTesting(false)
+//                            }
+//                        }
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 25)
+//                                .strokeBorder(Color.gray.opacity(0.8))
+//                    )
+//                    }
+                    
+                    ZStack(alignment: .leading) {
+                        Text(messageText)
+                            .font(.system(.body))
+                            .foregroundColor(.clear)
+                            .background(GeometryReader {
+                                Color.clear.preference(key: ViewHeightKey.self,
+                                                       value: $0.frame(in: .local).size.height)
+                            })
                         
-                        Text(messageText).opacity(0.0).padding()
+                        TextEditor(text: $messageText)
+                            .font(.system(.body))
+                            .frame(height: max(40,dynamicHeight))
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
                         
                         if messageText.isEmpty {
                             Text("Message")
-                                .padding(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundColor(Color.gray.opacity(0.3))
                                 .allowsHitTesting(false)
                         }
                     }
+                    .onPreferenceChange(ViewHeightKey.self) { dynamicHeight = $0 }
                     .overlay(
-                        RoundedRectangle(cornerRadius: 18)
-                            .strokeBorder(Color.gray.opacity(0.8))
+                        RoundedRectangle(cornerRadius: 25)
+                            .strokeBorder(Color.gray.opacity(0.3))
                     )
+                    .padding(.leading)
+
                     
                     Button {
                         // Send Image
@@ -97,5 +130,12 @@ struct ChatLogView_Previews: PreviewProvider {
         NavigationView {
             ChatLogView(user: ChatUser.exampleUser)
         }
+    }
+}
+
+struct ViewHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat { 0 }
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = value + nextValue()
     }
 }
