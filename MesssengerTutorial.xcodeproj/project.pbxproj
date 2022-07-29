@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C024B6B02878B7E800DE6FDC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C024B6AF2878B7E600DE6FDC /* ImagePicker.swift */; };
+		C053389E289448320002389B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389D289448320002389B /* ImagePicker.swift */; };
+		C05338A028944FAA0002389B /* ChatLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389F28944FA90002389B /* ChatLogVM.swift */; };
+		C05338A2289465A40002389B /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05338A1289465A40002389B /* ChatMessage.swift */; };
 		C060D7ED2891C670007BB912 /* ChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C060D7EC2891C670007BB912 /* ChatLogView.swift */; };
 		C06A24B92877789700CF3F7D /* MesssengerTutorialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06A24B82877789700CF3F7D /* MesssengerTutorialApp.swift */; };
 		C06A24BB2877789700CF3F7D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06A24BA2877789700CF3F7D /* LoginView.swift */; };
@@ -30,7 +32,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C024B6AF2878B7E600DE6FDC /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C053389D289448320002389B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C053389F28944FA90002389B /* ChatLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogVM.swift; sourceTree = "<group>"; };
+		C05338A1289465A40002389B /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		C060D7EC2891C670007BB912 /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
 		C06A24B52877789700CF3F7D /* MesssengerTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MesssengerTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06A24B82877789700CF3F7D /* MesssengerTutorialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesssengerTutorialApp.swift; sourceTree = "<group>"; };
@@ -135,8 +139,8 @@
 		C0960DC72880C21000674ED0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				C024B6AF2878B7E600DE6FDC /* ImagePicker.swift */,
 				C0960DC82880C21A00674ED0 /* FirebaseManager.swift */,
+				C053389D289448320002389B /* ImagePicker.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -145,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				C0960DCB2880C68A00674ED0 /* ChatUser.swift */,
+				C05338A1289465A40002389B /* ChatMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			children = (
 				C0E63111288F299600CEC515 /* NewMessageView.swift */,
 				C060D7EC2891C670007BB912 /* ChatLogView.swift */,
+				C053389F28944FA90002389B /* ChatLogVM.swift */,
 			);
 			path = NewMessage;
 			sourceTree = "<group>";
@@ -242,11 +248,13 @@
 			files = (
 				C0960DCC2880C68A00674ED0 /* ChatUser.swift in Sources */,
 				C072AD612881DD860023B621 /* ContentView.swift in Sources */,
+				C05338A028944FAA0002389B /* ChatLogVM.swift in Sources */,
 				C0960DC92880C21A00674ED0 /* FirebaseManager.swift in Sources */,
-				C024B6B02878B7E800DE6FDC /* ImagePicker.swift in Sources */,
 				C0960DC42880B63900674ED0 /* MainMessagesView.swift in Sources */,
 				C060D7ED2891C670007BB912 /* ChatLogView.swift in Sources */,
 				C072AD582881C6430023B621 /* UserService.swift in Sources */,
+				C05338A2289465A40002389B /* ChatMessage.swift in Sources */,
+				C053389E289448320002389B /* ImagePicker.swift in Sources */,
 				C072AD5D2881D3D30023B621 /* LoginVM.swift in Sources */,
 				C06A24BB2877789700CF3F7D /* LoginView.swift in Sources */,
 				C0E63112288F299600CEC515 /* NewMessageView.swift in Sources */,

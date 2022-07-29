@@ -29,7 +29,7 @@ struct MainMessagesView: View {
                 
                 NavigationLink("", isActive: $shouldNavToChatLog) {
                     if let chatUser = chatUser {
-                        ChatLogView(user: chatUser)
+                        ChatLogView(chatUser: chatUser)
                     }
                 }
             }

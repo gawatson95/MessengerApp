@@ -1,50 +1,49 @@
 //
 //  ImagePicker.swift
-//  Instafilter
+//  MesssengerTutorial
 //
-//  Created by Grant Watson on 3/22/22.
+//  Created by Grant Watson on 7/29/22.
 //
 
-import PhotosUI
 import SwiftUI
+import PhotosUI
 
 struct ImagePicker: UIViewControllerRepresentable {
+
     @Binding var image: UIImage?
-    
-    class Coordinator: NSObject, PHPickerViewControllerDelegate {
-        var parent: ImagePicker
-        
-        init(_ parent: ImagePicker) {
+
+    private let controller = UIImagePickerController()
+
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(parent: self)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+        let parent: ImagePicker
+
+        init(parent: ImagePicker) {
             self.parent = parent
         }
-        
-        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            parent.image = info[.originalImage] as? UIImage
             picker.dismiss(animated: true)
-            
-            guard let provider = results.first?.itemProvider else { return }
-            
-            if provider.canLoadObject(ofClass: UIImage.self) {
-                provider.loadObject(ofClass: UIImage.self) { image, _ in
-                    self.parent.image = image as? UIImage
-                }
-            }
         }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            picker.dismiss(animated: true)
+        }
+
     }
-    
-    func makeUIViewController(context: Context) -> PHPickerViewController {
-        var config = PHPickerConfiguration()
-        config.filter = .images
-        
-        let picker = PHPickerViewController(configuration: config)
-        picker.delegate = context.coordinator
-        return picker
+
+    func makeUIViewController(context: Context) -> some UIViewController {
+        controller.delegate = context.coordinator
+        return controller
     }
-    
-    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
-        
+
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+
     }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
+
 }

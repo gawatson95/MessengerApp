@@ -106,12 +106,12 @@ struct LoginView: View {
                 Spacer()
                 
             }
-            .padding()
-            .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
-            .navigationTitle(isLoginMode ? "Log In" : "Create Account")
             .fullScreenCover(isPresented: $showPicker, onDismiss: loadImage) {
                 ImagePicker(image: $image)
             }
+            .padding()
+            .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
+            .navigationTitle(isLoginMode ? "Log In" : "Create Account")
             .onAppear {
                 vm.loginMessage = ""
             }
@@ -130,7 +130,6 @@ struct LoginView: View {
     func loadImage() {
         guard let image = image else { return }
         profileImage = Image(uiImage: image)
-        print("DEBUG: LOADED IMAGE")
     }
 }
 

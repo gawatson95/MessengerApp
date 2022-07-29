@@ -68,7 +68,7 @@ struct NewMessageView: View {
 
 struct NewMessageView_Previews: PreviewProvider {
     static var previews: some View {
-//        NewMessageView()
+        //NewMessageView()
         ContentView()
             .environmentObject(LoginVM())
     }

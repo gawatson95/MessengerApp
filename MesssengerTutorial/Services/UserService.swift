@@ -40,7 +40,6 @@ struct UserService {
                     }
                 }
                 completion(allUsers)
-                print("DEBUG: Fetched all users: \(allUsers)")
             }
     }
 }
