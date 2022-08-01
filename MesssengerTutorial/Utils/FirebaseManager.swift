@@ -9,13 +9,15 @@ import Foundation
 import Firebase
 import FirebaseStorage
 
-class FirebaseManager: NSObject {
+class FirebaseManager: NSObject, ObservableObject {
     
     let auth: Auth
     let storage: Storage
     let firestore: Firestore
     
     static let shared = FirebaseManager()
+    
+    @Published var currentUser: ChatUser?
     
     override init() {
         

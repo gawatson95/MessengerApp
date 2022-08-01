@@ -12,17 +12,17 @@ struct ChatLogView: View {
     @ObservedObject var vm: ChatLogVM
     @Namespace var bottomId
     
-    var chatUser: ChatUser?
+    let chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
-        self.vm = ChatLogVM(chatUser: chatUser)
+        self.vm = .init(chatUser: chatUser)
     }
     
     @State private var dynamicHeight: CGFloat = 0.0
     
     var body: some View {
-        if let user = chatUser {
+        if let user = vm.chatUser {
             VStack {
                 ScrollView {
                     ScrollViewReader { scroll in
@@ -59,6 +59,7 @@ struct ChatLogView: View {
                 
                 bottomChatBar
             }
+            .onDisappear { vm.firestoreListener?.remove() }
             .padding(.top, 1)
         }
     }

@@ -11,6 +11,7 @@ import FirebaseStorage
 
 struct LoginView: View {
     @EnvironmentObject var vm: LoginVM
+    @ObservedObject var mainVM: MainMessagesVM
     
     @State private var isLoginMode: Bool = true
     @State private var email: String = ""
@@ -121,6 +122,7 @@ struct LoginView: View {
     private func handleAction() {
         if isLoginMode {
             vm.loginWithEmail(withEmail: email, password: password)
+            mainVM.fetchRecentMessages()
         } else {
             guard let image = image else { return }
             vm.register(withEmail: email, username: username, password: password, image: image)
@@ -135,7 +137,7 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(mainVM: MainMessagesVM())
             .environmentObject(LoginVM())
     }
 }

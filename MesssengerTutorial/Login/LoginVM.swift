@@ -12,8 +12,8 @@ class LoginVM: ObservableObject {
     
     @Published var userSession: Firebase.User?
     @Published var tempUserSession: Firebase.User?
-    @Published var currentUser: ChatUser?
     @Published var users = [ChatUser]()
+    @Published var currentUser: ChatUser?
     
     @Published var loginMessage: String = ""
     @Published var didAuthUser: Bool = false
@@ -92,6 +92,7 @@ class LoginVM: ObservableObject {
         guard let uid = self.userSession?.uid else { return }
         
         service.fetchCurrentUser(withUid: uid) { user in
+            FirebaseManager.shared.currentUser = user
             self.currentUser = user
         }
     }

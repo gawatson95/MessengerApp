@@ -11,11 +11,12 @@ struct ContentView: View {
     
     @EnvironmentObject var vm: LoginVM
     
+    
     var body: some View {
         if vm.userSession == nil {
-            LoginView()
+            LoginView(mainVM: MainMessagesVM())
         } else {
-            MainMessagesView()
+            MainMessagesView(chatVM: ChatLogVM(chatUser: ChatUser.exampleUser))
         }
     }
 }

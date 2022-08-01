@@ -13,18 +13,20 @@ class ChatLogVM: ObservableObject {
     @Published var messageText: String = ""
     @Published var chatMessages = [ChatMessage]()
     
-    let chatUser: ChatUser?
+    var chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
         fetchMessages()
     }
     
+    var firestoreListener: ListenerRegistration?
+    
     func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let toId = chatUser?.uid else { return }
         
-        FirebaseManager.shared.firestore
+        firestoreListener = FirebaseManager.shared.firestore
             .collection("messages")
             .document(fromId)
             .collection(toId)
@@ -113,5 +115,28 @@ class ChatLogVM: ObservableObject {
                 return
             }
         }
+        
+        guard let currentUser = FirebaseManager.shared.currentUser else { return }
+        
+        let recipientRecentMessage = [
+            "timestamp": Timestamp(),
+            "text": self.messageText,
+            "fromId": uid,
+            "toId": toId,
+            "profileImageUrl": currentUser.profileImageUrl,
+            "username": currentUser.username
+        ] as [String: Any]
+        
+        FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(toId)
+            .collection("messages")
+            .document(currentUser.uid)
+            .setData(recipientRecentMessage) { error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+            }
     }
 }

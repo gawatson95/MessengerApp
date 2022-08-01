@@ -11,6 +11,7 @@ import Kingfisher
 struct MainMessagesView: View {
     
     @EnvironmentObject var vm: LoginVM
+    @ObservedObject var chatVM = ChatLogVM(chatUser: nil)
     @ObservedObject var mainVm = MainMessagesVM()
     
     @State private var chatUser: ChatUser?
@@ -29,9 +30,7 @@ struct MainMessagesView: View {
                 messagesView
                 
                 NavigationLink("", isActive: $shouldNavToChatLog) {
-                    if let chatUser = chatUser {
-                        ChatLogView(chatUser: chatUser)
-                    }
+                    ChatLogView(chatUser: chatUser)
                 }
             }
             .navigationBarHidden(true)
@@ -68,7 +67,7 @@ extension MainMessagesView {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                if let username = vm.currentUser?.username {
+                if let username = FirebaseManager.shared.currentUser?.username {
                     Text(username)
                         .font(.title2).bold()
                 } else {
@@ -99,42 +98,56 @@ extension MainMessagesView {
     }
     
     private var messagesView: some View {
-        ScrollView {
-            ForEach(mainVm.recentMessages) { message in
-                VStack {
-                    HStack(alignment: .top) {
-                        KFImage(URL(string: message.profileImageUrl))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 60, height: 60)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(.primary, lineWidth: 1)
-                            )
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(message.username)
-                                .bold()
-                            Text(message.text)
-                                .font(.callout)
-                                .foregroundColor(.gray)
-                                .lineLimit(2)
+        ZStack {
+            ScrollView {
+                ForEach(mainVm.recentMessages) { message in
+                    NavigationLink {
+                        ChatLogView(chatUser: )
+                    } label: {
+                        VStack {
+                            HStack(alignment: .top) {
+                                KFImage(URL(string: message.profileImageUrl))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .stroke(.primary, lineWidth: 1)
+                                    )
+                                
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(message.username)
+                                        .bold()
+                                    Text(message.text)
+                                        .font(.callout)
+                                        .foregroundColor(.gray)
+                                        .lineLimit(2)
+                                }
+                                
+                                Spacer()
+                                
+                                Text("\(message.formattedTime)")
+                                    .foregroundColor(.gray)
+                                    .font(.callout)
+                            }
+                            
+                            Divider()
                         }
-                        
-                        Spacer()
-                        
-                        Text(message.formattedTimestamp)
-                            .foregroundColor(.gray)
-                            .font(.callout)
                     }
-                    
-                    Divider()
+
                 }
+                .padding()
             }
-            .padding()
+
+            .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
+                NewMessageView { user in
+                    self.shouldNavToChatLog.toggle()
+                    self.chatUser = user
+                    self.chatVM.chatUser = user
+                    self.chatVM.fetchMessages()
+                }
         }
-        .overlay(alignment: .bottom) {
             Button {
                 shouldShowNewMessageScreen.toggle()
             } label: {
@@ -148,12 +161,7 @@ extension MainMessagesView {
                     .padding(.horizontal)
                     .shadow(color: .black.opacity(0.5), radius: 5)
             }
-        }
-        .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
-            NewMessageView { user in
-                self.shouldNavToChatLog.toggle()
-                self.chatUser = user
-            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
         }
     }
 }
