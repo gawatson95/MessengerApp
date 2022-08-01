@@ -66,6 +66,8 @@ class ChatLogVM: ObservableObject {
             }
         }
         
+        persistRecentMessage()
+        
         let recipientDocument = FirebaseManager.shared.firestore
             .collection("messages")
             .document(toId)
@@ -80,5 +82,36 @@ class ChatLogVM: ObservableObject {
         }
         
         messageText = ""
+    }
+    
+    func persistRecentMessage() {
+        
+        guard let chatUser = chatUser else { return }
+        
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
+        guard let toId = self.chatUser?.uid else { return }
+        
+        let document = FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .document(toId)
+        
+        let data = [
+            "timestamp": Timestamp(),
+            "text": self.messageText,
+            "fromId": uid,
+            "toId": toId,
+            "profileImageUrl": chatUser.profileImageUrl,
+            "username": chatUser.username
+        ] as [String: Any]
+        
+        document.setData(data) { error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+        }
     }
 }

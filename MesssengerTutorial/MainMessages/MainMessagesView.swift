@@ -11,6 +11,7 @@ import Kingfisher
 struct MainMessagesView: View {
     
     @EnvironmentObject var vm: LoginVM
+    @ObservedObject var mainVm = MainMessagesVM()
     
     @State private var chatUser: ChatUser?
     @State private var shouldShowLogOutOptions: Bool = false
@@ -56,7 +57,7 @@ extension MainMessagesView {
                 KFImage(URL(string: user.profileImageUrl))
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 50, height: 50)
+                    .frame(width: 45, height: 45)
                     .clipShape(Circle())
                     .overlay(
                         Circle()
@@ -99,29 +100,33 @@ extension MainMessagesView {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { _ in
+            ForEach(mainVm.recentMessages) { message in
                 VStack {
-                    HStack {
-                        Image(systemName: "person.fill")
+                    HStack(alignment: .top) {
+                        KFImage(URL(string: message.profileImageUrl))
                             .resizable()
-                            .frame(width: 30, height: 30)
-                            .padding(10)
+                            .scaledToFill()
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
                             .overlay(
                                 Circle()
                                     .stroke(.primary, lineWidth: 1)
                             )
                         
-                        VStack(alignment: .leading) {
-                            Text("Sender Username")
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(message.username)
                                 .bold()
-                            Text("Message text goes here")
+                            Text(message.text)
+                                .font(.callout)
                                 .foregroundColor(.gray)
+                                .lineLimit(2)
                         }
                         
                         Spacer()
                         
-                        Text("22d")
-                            .fontWeight(.semibold)
+                        Text(message.formattedTimestamp)
+                            .foregroundColor(.gray)
+                            .font(.callout)
                     }
                     
                     Divider()
@@ -157,7 +162,6 @@ struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MainMessagesView()
-            
             
             MainMessagesView()
                 .preferredColorScheme(.dark)
