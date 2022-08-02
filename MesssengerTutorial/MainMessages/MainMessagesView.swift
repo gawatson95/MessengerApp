@@ -101,8 +101,16 @@ extension MainMessagesView {
         ZStack {
             ScrollView {
                 ForEach(mainVm.recentMessages) { message in
-                    NavigationLink {
-                        ChatLogView(chatUser: )
+                   Button {
+                       let uid = FirebaseManager.shared.currentUser?.uid == message.fromId ? message.toId : message.fromId
+                       self.chatUser = .init(snapshot: [
+                                            "username": message.username,
+                                            "profileImageUrl": message.profileImageUrl,
+                                            "uid": uid
+                                            ])
+                       self.chatVM.chatUser = self.chatUser
+                       self.chatVM.fetchMessages()
+                       self.shouldNavToChatLog.toggle()
                     } label: {
                         VStack {
                             HStack(alignment: .top) {
@@ -131,6 +139,7 @@ extension MainMessagesView {
                                     .foregroundColor(.gray)
                                     .font(.callout)
                             }
+                            .foregroundColor(.black)
                             
                             Divider()
                         }
