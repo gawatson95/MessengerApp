@@ -139,7 +139,6 @@ extension MainMessagesView {
                                     .foregroundColor(.gray)
                                     .font(.callout)
                             }
-                            .foregroundColor(.black)
                             
                             Divider()
                         }
@@ -165,7 +164,7 @@ extension MainMessagesView {
                     .padding(12)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .background(.blue)
+                    .background(Color.theme.background)
                     .clipShape(Capsule())
                     .padding(.horizontal)
                     .shadow(color: .black.opacity(0.5), radius: 5)
