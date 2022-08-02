@@ -29,9 +29,9 @@ struct ChatLogView: View {
                         ForEach(vm.chatMessages) { message in
                             LazyVStack {
                                 Text(message.text)
-                                    .foregroundColor(message.fromId == user.uid ? .black : .white)
+                                    .foregroundColor(message.fromId == user.uid ? Color.theme.accent : .white)
                                     .padding(12)
-                                    .background(message.fromId == user.uid ? Color.white : Color.blue)
+                                    .background(message.fromId == user.uid ? Color.white : Color.theme.background)
                                     .clipShape(RoundedRectangle(cornerRadius: 15))
                                     .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
                             }
@@ -119,6 +119,7 @@ extension ChatLogView {
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .resizable()
+                    .foregroundColor(Color.theme.background)
                     .scaledToFit()
                     .frame(width: 25)
             }
@@ -127,33 +128,33 @@ extension ChatLogView {
         .padding(.horizontal, 6)
     }
     
-    private var messagesView: some View {
-        VStack {
-            ScrollView {
-                ForEach(0 ..< 10) { _ in
-                    LazyVStack {
-                        Text("user.username")
-                            .foregroundColor(.white)
-                            .padding(10)
-                            .background(Color.blue)
-                            .clipShape(Capsule())
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(.trailing, 8)
-                        Text("Hello, world!")
-                            .foregroundColor(.primary)
-                            .padding(10)
-                            .background(Color.white)
-                            .clipShape(Capsule())
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 8)
-                    }
-                }
-                .padding(.vertical)
-                .background(Color(.init(white: 0.95, alpha: 1)))
-                
-            }
-        }
-    }
+//    private var messagesView: some View {
+//        VStack {
+//            ScrollView {
+//                ForEach(0 ..< 10) { _ in
+//                    LazyVStack {
+//                        Text("user.username")
+//                            .foregroundColor(.white)
+//                            .padding(10)
+//                            .background(Color.blue)
+//                            .clipShape(Capsule())
+//                            .frame(maxWidth: .infinity, alignment: .trailing)
+//                            .padding(.trailing, 8)
+//                        Text("Hello, world!")
+//                            .foregroundColor(.primary)
+//                            .padding(10)
+//                            .background(Color.white)
+//                            .clipShape(Capsule())
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .padding(.leading, 8)
+//                    }
+//                }
+//                .padding(.vertical)
+//                .background(Color(.init(white: 0.95, alpha: 1)))
+//
+//            }
+//        }
+//    }
 }
 
 struct ViewHeightKey: PreferenceKey {

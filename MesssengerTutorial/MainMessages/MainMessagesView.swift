@@ -24,8 +24,7 @@ struct MainMessagesView: View {
             VStack(spacing: 0) {
                 
                 customNavBar
-                
-                Divider()
+                    .background(Color.theme.background)
                 
                 messagesView
                 
@@ -60,7 +59,7 @@ extension MainMessagesView {
                     .clipShape(Circle())
                     .overlay(
                         Circle()
-                            .stroke(.primary, lineWidth: 1)
+                            .stroke(Color.theme.white, lineWidth: 1)
                     )
             } else {
                 ProgressView()
@@ -70,6 +69,7 @@ extension MainMessagesView {
                 if let username = FirebaseManager.shared.currentUser?.username {
                     Text(username)
                         .font(.title2).bold()
+                        .foregroundColor(Color.theme.white)
                 } else {
                     ProgressView()
                 }
@@ -78,9 +78,14 @@ extension MainMessagesView {
                     Circle()
                         .foregroundColor(.green)
                         .frame(width: 12, height: 12)
+                        .overlay(
+                            Circle()
+                                .stroke(Color.theme.accent.opacity(0.5), lineWidth: 0.4)
+                                .frame(width: 12, height: 12)
+                        )
                     Text("Online")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color.theme.white)
                 }
             }
             
@@ -91,6 +96,7 @@ extension MainMessagesView {
             } label: {
                 Image(systemName: "gear")
                     .resizable()
+                    .foregroundColor(Color.theme.white)
                     .frame(width: 25, height: 25)
             }
         }
@@ -127,6 +133,7 @@ extension MainMessagesView {
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(message.username)
                                         .bold()
+                                        .foregroundColor(Color.theme.accent)
                                     Text(message.text)
                                         .font(.callout)
                                         .foregroundColor(.gray)

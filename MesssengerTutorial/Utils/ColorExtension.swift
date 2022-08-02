@@ -14,4 +14,5 @@ extension Color {
 struct ColorTheme {
     let background = Color("Background")
     let accent = Color("AccentColor")
+    let white = Color("WhiteText")
 }
