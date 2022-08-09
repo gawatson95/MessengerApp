@@ -11,7 +11,6 @@ struct ContentView: View {
     
     @EnvironmentObject var vm: LoginVM
     
-    
     var body: some View {
         if vm.userSession == nil {
             LoginView(mainVM: MainMessagesVM())

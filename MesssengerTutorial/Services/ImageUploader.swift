@@ -7,7 +7,7 @@
 
 import UIKit
 import FirebaseStorage
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 
 struct ImageUploader {
     static func uploadImage(image: UIImage, userUid uid: String, completion: @escaping(String) -> Void) {

@@ -14,6 +14,7 @@ class MainMessagesVM: ObservableObject {
     @Published var recentMessages = [RecentMessage]()
     
     private var firestoreListener: ListenerRegistration?
+    let service = NotificationService()
     
     init() {
         fetchRecentMessages()
@@ -44,8 +45,9 @@ class MainMessagesVM: ObservableObject {
                     }) {
                         self.recentMessages.remove(at: index)
                     }
-                        
-                   self.recentMessages.insert(RecentMessage(documentId: docId, data: change.document.data()), at: 0)
+                    let lastestMessage = RecentMessage(documentId: docId, data: change.document.data())
+                    self.recentMessages.insert(lastestMessage, at: 0)
+                    self.service.setNotification(recentMessage: lastestMessage)
                 })
             }
     }
