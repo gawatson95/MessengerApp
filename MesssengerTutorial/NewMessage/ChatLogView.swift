@@ -12,6 +12,8 @@ struct ChatLogView: View {
     @ObservedObject var vm: ChatLogVM
     @Namespace var bottomId
     
+    @State private var confirmDeleteDialog: Bool = false
+    
     let chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
@@ -53,6 +55,13 @@ struct ChatLogView: View {
                     }
                     .padding(.vertical)
                     .navigationTitle(user.username)
+                    .navigationBarItems(trailing:
+                        Image(systemName: "trash")
+                        .foregroundColor(.red)
+                        .onTapGesture {
+                            confirmDeleteDialog.toggle()
+                        }
+                    )
                     .navigationBarTitleDisplayMode(.inline)
                 }
                 .background(Color(.init(white: 0.95, alpha: 1)))
@@ -61,6 +70,13 @@ struct ChatLogView: View {
             }
             .onDisappear { vm.firestoreListener?.remove() }
             .padding(.top, 1)
+            .alert("Confirm Delete", isPresented: $confirmDeleteDialog) {
+                Button("Delete", role: .destructive) {
+                    vm.deleteChatLog()
+                }
+            } message: {
+                Text("Confirm deletion of your messages with \(user.username). This action cannot be undone.")
+            }
         }
     }
 }
@@ -127,34 +143,6 @@ extension ChatLogView {
         .padding(6)
         .padding(.horizontal, 6)
     }
-    
-//    private var messagesView: some View {
-//        VStack {
-//            ScrollView {
-//                ForEach(0 ..< 10) { _ in
-//                    LazyVStack {
-//                        Text("user.username")
-//                            .foregroundColor(.white)
-//                            .padding(10)
-//                            .background(Color.blue)
-//                            .clipShape(Capsule())
-//                            .frame(maxWidth: .infinity, alignment: .trailing)
-//                            .padding(.trailing, 8)
-//                        Text("Hello, world!")
-//                            .foregroundColor(.primary)
-//                            .padding(10)
-//                            .background(Color.white)
-//                            .clipShape(Capsule())
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                            .padding(.leading, 8)
-//                    }
-//                }
-//                .padding(.vertical)
-//                .background(Color(.init(white: 0.95, alpha: 1)))
-//
-//            }
-//        }
-//    }
 }
 
 struct ViewHeightKey: PreferenceKey {

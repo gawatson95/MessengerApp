@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class ChatLogVM: ObservableObject {
     
@@ -136,6 +137,31 @@ class ChatLogVM: ObservableObject {
                 if let error = error {
                     print(error.localizedDescription)
                     return
+                }
+            }
+    }
+    
+    func deleteChatLog() {
+        guard let toId = chatUser?.uid else { return }
+        guard let currentUser = FirebaseManager.shared.currentUser else { return }
+        
+        FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(currentUser.uid)
+            .collection("messages")
+            .document(toId).delete()
+        
+        FirebaseManager.shared.firestore
+            .collection("messages")
+            .document(currentUser.uid)
+            .collection(toId)
+            //.document
+            .getDocuments { snapshot, err in
+                if let err = err {
+                    print(err.localizedDescription)
+                    return
+                } else {
+                    snapshot?.
                 }
             }
     }

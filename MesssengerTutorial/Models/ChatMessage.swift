@@ -21,9 +21,4 @@ struct ChatMessage: Identifiable, Hashable {
         self.toId = data["toId"] as? String ?? ""
         self.text = data["text"] as? String ?? ""
     }
-    
-//    init(fromId: String, text: String) {
-//        self.fromId = fromId
-//        self.text = text
-//    }
 }

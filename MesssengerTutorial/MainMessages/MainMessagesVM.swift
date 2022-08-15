@@ -47,7 +47,6 @@ class MainMessagesVM: ObservableObject {
                     }
                     let lastestMessage = RecentMessage(documentId: docId, data: change.document.data())
                     self.recentMessages.insert(lastestMessage, at: 0)
-                    self.service.setNotification(recentMessage: lastestMessage)
                 })
             }
     }

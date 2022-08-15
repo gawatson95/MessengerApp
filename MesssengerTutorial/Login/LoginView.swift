@@ -61,7 +61,7 @@ struct LoginView: View {
                                 Text("Add Profile Picture")
                                     .bold()
                             }
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color.theme.background)
                         }
                     }
                 }
@@ -96,7 +96,7 @@ struct LoginView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .foregroundColor(.white)
-                        .background(.blue)
+                        .background(Color.theme.background)
                         .clipShape(Capsule())
                 }
                 

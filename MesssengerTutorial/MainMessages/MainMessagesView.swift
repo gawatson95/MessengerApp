@@ -150,7 +150,6 @@ extension MainMessagesView {
                             Divider()
                         }
                     }
-
                 }
                 .padding()
             }
