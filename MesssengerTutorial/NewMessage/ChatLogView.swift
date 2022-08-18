@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ChatLogView: View {
     
+    @Environment(\.dismiss) var dismiss
+    
     @ObservedObject var vm: ChatLogVM
     @Namespace var bottomId
     
@@ -68,11 +70,14 @@ struct ChatLogView: View {
                 
                 bottomChatBar
             }
-            .onDisappear { vm.firestoreListener?.remove() }
+            .onDisappear {
+                vm.firestoreListener?.remove()
+            }
             .padding(.top, 1)
             .alert("Confirm Delete", isPresented: $confirmDeleteDialog) {
                 Button("Delete", role: .destructive) {
                     vm.deleteChatLog()
+                    dismiss()
                 }
             } message: {
                 Text("Confirm deletion of your messages with \(user.username). This action cannot be undone.")

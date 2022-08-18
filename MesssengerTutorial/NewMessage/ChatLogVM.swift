@@ -15,13 +15,16 @@ class ChatLogVM: ObservableObject {
     @Published var chatMessages = [ChatMessage]()
     
     var chatUser: ChatUser?
+    @ObservedObject var mainVM: MainMessagesVM
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
+        self.mainVM = MainMessagesVM()
         fetchMessages()
     }
     
     var firestoreListener: ListenerRegistration?
+    var firebaseDeleteListener: ListenerRegistration?
     
     func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
@@ -90,9 +93,7 @@ class ChatLogVM: ObservableObject {
     func persistRecentMessage() {
         
         guard let chatUser = chatUser else { return }
-        
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
-        
         guard let toId = self.chatUser?.uid else { return }
         
         let document = FirebaseManager.shared.firestore
@@ -145,23 +146,35 @@ class ChatLogVM: ObservableObject {
         guard let toId = chatUser?.uid else { return }
         guard let currentUser = FirebaseManager.shared.currentUser else { return }
         
-        FirebaseManager.shared.firestore
+        firebaseDeleteListener = FirebaseManager.shared.firestore
             .collection("recent_messages")
             .document(currentUser.uid)
             .collection("messages")
-            .document(toId).delete()
+            .document(toId)
+            .addSnapshotListener { snapshot, error in
+                guard let document = snapshot else { return }
+
+                if let index = self.mainVM.recentMessages.firstIndex(where: { message in
+                    return message.documentId == document.reference.documentID
+                }) {
+                    self.mainVM.recentMessages.remove(at: index)
+                    document.reference.delete()
+                    print("DEBUG: recent deleted")
+                }
+            }
         
         FirebaseManager.shared.firestore
             .collection("messages")
             .document(currentUser.uid)
             .collection(toId)
-            //.document
             .getDocuments { snapshot, err in
                 if let err = err {
                     print(err.localizedDescription)
                     return
                 } else {
-                    snapshot?.
+                    for doc in snapshot!.documents {
+                        doc.reference.delete()
+                    }
                 }
             }
     }

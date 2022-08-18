@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-struct RecentMessage: Identifiable {
+struct RecentMessage: Identifiable, Hashable {
     var id: String { documentId }
     
     let documentId: String

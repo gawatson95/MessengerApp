@@ -11,8 +11,9 @@ import Kingfisher
 struct MainMessagesView: View {
     
     @EnvironmentObject var vm: LoginVM
+    @ObservedObject var mainVM: MainMessagesVM
+    
     @ObservedObject var chatVM = ChatLogVM(chatUser: nil)
-    @ObservedObject var mainVm = MainMessagesVM()
     
     @State private var chatUser: ChatUser?
     @State private var shouldShowLogOutOptions: Bool = false
@@ -106,7 +107,7 @@ extension MainMessagesView {
     private var messagesView: some View {
         ZStack {
             ScrollView {
-                ForEach(mainVm.recentMessages) { message in
+                ForEach(mainVM.recentMessages, id: \.self) { message in
                    Button {
                        let uid = FirebaseManager.shared.currentUser?.uid == message.fromId ? message.toId : message.fromId
                        self.chatUser = .init(snapshot: [
@@ -182,12 +183,7 @@ extension MainMessagesView {
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            MainMessagesView()
-            
-            MainMessagesView()
-                .preferredColorScheme(.dark)
-        }
-        .environmentObject(LoginVM())
+        MainMessagesView(mainVM: MainMessagesVM())
+            .environmentObject(LoginVM())
     }
 }

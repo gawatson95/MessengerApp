@@ -15,7 +15,7 @@ struct ContentView: View {
         if vm.userSession == nil {
             LoginView(mainVM: MainMessagesVM())
         } else {
-            MainMessagesView(chatVM: ChatLogVM(chatUser: ChatUser.exampleUser))
+            MainMessagesView(mainVM: MainMessagesVM(), chatVM: ChatLogVM(chatUser: ChatUser.exampleUser))
         }
     }
 }
@@ -23,5 +23,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(LoginVM())
     }
 }
