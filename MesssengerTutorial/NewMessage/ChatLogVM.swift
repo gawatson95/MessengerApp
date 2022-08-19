@@ -152,36 +152,37 @@ class ChatLogVM: ObservableObject {
             .collection("recent_messages")
             .document(currentUser.uid)
             .collection("messages")
-            //.document(toId)
-//            .addSnapshotListener { snapshot, error in
-//                guard let document = snapshot else { return }
-//
-//                if let index = self.mainVM.recentMessages.firstIndex(where: { message in
-//                    return message.documentId == document.reference.documentID
-//                }) {
-//                    self.mainVM.recentMessages.remove(at: index)
-//                    print(self.mainVM.recentMessages)
-//                    document.reference.delete()
-//                    print("DEBUG: recent deleted")
-//                }
-//            }
+            .document(toId)
             .addSnapshotListener { snapshot, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
+                guard let document = snapshot else { return }
+
+                if let index = self.mainVM.recentMessages.firstIndex(where: { message in
+                    return message.documentId == document.reference.documentID
+                }) {
+                    self.mainVM.recentMessages.remove(at: index)
+                    print(self.mainVM.recentMessages)
+                    document.reference.delete()
+                    print("DEBUG: recent deleted")
                 }
-                
-                snapshot?.documentChanges.forEach({ change in
-                    let docId = change.document.documentID
-                    
-                    if let index = self.mainVM.recentMessages.firstIndex(where: { message in
-                        return message.documentId == docId
-                    }) {
-                        self.mainVM.recentMessages.remove(at: index)
-                        // figure out how to update firestore here
-                    }
-                })
             }
+//            .addSnapshotListener { snapshot, error in
+//                if let error = error {
+//                    print(error.localizedDescription)
+//                    return
+//                }
+//
+//                snapshot?.documentChanges.forEach({ change in
+//                    let docId = change.document.documentID
+//
+//                    if let index = self.mainVM.recentMessages.firstIndex(where: { message in
+//                        return message.documentId == docId
+//                    }) {
+//                        self.mainVM.recentMessages.remove(at: index)
+//                        change.document.reference.delete()
+//                        // figure out how to update firestore here
+//                    }
+//                })
+//            }
         
         FirebaseManager.shared.firestore
             .collection("messages")

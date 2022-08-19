@@ -38,15 +38,19 @@ class MainMessagesVM: ObservableObject {
                 }
                 
                 snapshot?.documentChanges.forEach({ change in
-                    let docId = change.document.documentID
-                    
-                    if let index = self.recentMessages.firstIndex(where: { message in
-                        return message.documentId == docId
-                    }) {
-                        self.recentMessages.remove(at: index)
+                    if change.type == .added {
+                        let docId = change.document.documentID
+                        
+                        if let index = self.recentMessages.firstIndex(where: { message in
+                            return message.documentId == docId
+                        }) {
+                            self.recentMessages.remove(at: index)
+                        }
+                        let lastestMessage = RecentMessage(documentId: docId, data: change.document.data())
+                        self.recentMessages.insert(lastestMessage, at: 0)
+                    } else if change.type == .removed {
+                        return
                     }
-                    let lastestMessage = RecentMessage(documentId: docId, data: change.document.data())
-                    self.recentMessages.insert(lastestMessage, at: 0)
                 })
             }
     }
