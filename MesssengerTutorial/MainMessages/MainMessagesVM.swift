@@ -12,7 +12,7 @@ import FirebaseStorage
 class MainMessagesVM: ObservableObject {
     
     @Published var recentMessages: [RecentMessage] = []
-    
+        
     private var firestoreListener: ListenerRegistration?
     let service = NotificationService()
     

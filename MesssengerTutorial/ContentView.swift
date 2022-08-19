@@ -15,7 +15,7 @@ struct ContentView: View {
         if vm.userSession == nil {
             LoginView(mainVM: MainMessagesVM())
         } else {
-            MainMessagesView(mainVM: MainMessagesVM(), chatVM: ChatLogVM(chatUser: ChatUser.exampleUser))
+            MainMessagesView(mainVM: MainMessagesVM(), chatVM: ChatLogVM(chatUser: ChatUser.exampleUser, mainVM: MainMessagesVM()))
         }
     }
 }

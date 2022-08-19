@@ -12,15 +12,17 @@ struct ChatLogView: View {
     @Environment(\.dismiss) var dismiss
     
     @ObservedObject var vm: ChatLogVM
+    //@ObservedObject var mainVM: MainMessagesVM
+    
     @Namespace var bottomId
     
     @State private var confirmDeleteDialog: Bool = false
     
     let chatUser: ChatUser?
     
-    init(chatUser: ChatUser?) {
+    init(chatUser: ChatUser?, mainVM: MainMessagesVM) {
         self.chatUser = chatUser
-        self.vm = .init(chatUser: chatUser)
+        self.vm = .init(chatUser: chatUser, mainVM: mainVM)
     }
     
     @State private var dynamicHeight: CGFloat = 0.0
@@ -89,7 +91,7 @@ struct ChatLogView: View {
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ChatLogView(chatUser: ChatUser.exampleUser)
+            ChatLogView(chatUser: ChatUser.exampleUser, mainVM: MainMessagesVM())
         }
     }
 }
