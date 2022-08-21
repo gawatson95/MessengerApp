@@ -15,7 +15,7 @@ struct MainMessagesView: View {
     @ObservedObject var mainVM: MainMessagesVM
     @ObservedObject var chatVM: ChatLogVM
     
-    @State private var chatUser: ChatUser?
+    @State var chatUser: ChatUser?
     @State private var shouldShowLogOutOptions: Bool = false
     @State private var shouldShowNewMessageScreen: Bool = false
     @State private var shouldNavToChatLog: Bool = false
@@ -106,7 +106,7 @@ extension MainMessagesView {
     
     private var messagesView: some View {
         ZStack {
-            ScrollView {
+            List {
                 ForEach(mainVM.recentMessages) { message in
                    Button {
                        let uid = FirebaseManager.shared.currentUser?.uid == message.fromId ? message.toId : message.fromId
@@ -120,16 +120,17 @@ extension MainMessagesView {
                        self.shouldNavToChatLog.toggle()
                     } label: {
                         VStack {
-                            HStack(alignment: .top) {
+                            HStack(alignment: .top, spacing: 10) {
                                 KFImage(URL(string: message.profileImageUrl))
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 60, height: 60)
+                                    .frame(width: 55, height: 55)
                                     .clipShape(Circle())
                                     .overlay(
                                         Circle()
                                             .stroke(.primary, lineWidth: 1)
                                     )
+                                    .padding(.vertical, 3)
                                 
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text(message.username)
@@ -147,13 +148,13 @@ extension MainMessagesView {
                                     .foregroundColor(.gray)
                                     .font(.callout)
                             }
-                            
-                            Divider()
                         }
                     }
                 }
-                .padding()
+                .onDelete(perform: delete)
             }
+            .listStyle(.plain)
+
 
             .fullScreenCover(isPresented: $shouldShowNewMessageScreen) {
                 NewMessageView { user in
@@ -178,6 +179,13 @@ extension MainMessagesView {
             }
             .frame(maxHeight: .infinity, alignment: .bottom)
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        print(mainVM.recentMessages)
+        mainVM.recentMessages.remove(atOffsets: offsets)
+        chatVM.deleteChatLog(at: offsets)
+        print(mainVM.recentMessages)
     }
 }
 

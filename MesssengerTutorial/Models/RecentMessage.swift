@@ -17,6 +17,16 @@ struct RecentMessage: Identifiable, Hashable {
     let profileImageUrl: String
     let timestamp: Timestamp
     
+    init(documentId: String, text: String, username: String, fromId: String, toId: String, profileImageUrl: String, timestamp: Date) {
+        self.documentId = documentId
+        self.text = text
+        self.username = username
+        self.fromId = fromId
+        self.toId = toId
+        self.profileImageUrl = profileImageUrl
+        self.timestamp = Timestamp(date: Date())
+    }
+    
     init(documentId: String, data: [String : Any]) {
         self.documentId = documentId
         self.text = data["text"] as? String ?? ""
@@ -39,4 +49,6 @@ struct RecentMessage: Identifiable, Hashable {
             return dateTimestamp.formatted(date: .omitted, time: .shortened)
         }
     }
+    
+    static let exampleRecentMessage = RecentMessage(documentId: "", text: "Test message", username: "Lady Gaga", fromId: "", toId: "", profileImageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80", timestamp: Date.now)
 }

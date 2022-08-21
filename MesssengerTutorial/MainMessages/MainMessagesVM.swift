@@ -38,7 +38,7 @@ class MainMessagesVM: ObservableObject {
                 }
                 
                 snapshot?.documentChanges.forEach({ change in
-                    if change.type == .added {
+                    if change.type == .added || change.type == .modified {
                         let docId = change.document.documentID
                         
                         if let index = self.recentMessages.firstIndex(where: { message in

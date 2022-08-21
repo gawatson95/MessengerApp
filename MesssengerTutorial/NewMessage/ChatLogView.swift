@@ -12,7 +12,6 @@ struct ChatLogView: View {
     @Environment(\.dismiss) var dismiss
     
     @ObservedObject var vm: ChatLogVM
-    //@ObservedObject var mainVM: MainMessagesVM
     
     @Namespace var bottomId
     
@@ -59,19 +58,21 @@ struct ChatLogView: View {
                     }
                     .padding(.vertical)
                     .navigationTitle(user.username)
-                    .navigationBarItems(trailing:
-                        Image(systemName: "trash")
-                        .foregroundColor(.red)
-                        .onTapGesture {
-                            confirmDeleteDialog.toggle()
-                        }
-                    )
+                    .navigationBarItems(
+                        trailing:
+                            !vm.chatMessages.isEmpty ? Image(systemName: "trash")
+                                .foregroundColor(.red)
+                                .onTapGesture {
+                                    confirmDeleteDialog.toggle()
+                                } : nil
+                        )
                     .navigationBarTitleDisplayMode(.inline)
                 }
-                .background(Color(.init(white: 0.95, alpha: 1)))
+                
                 
                 bottomChatBar
             }
+            .background(Color(.init(white: 0.95, alpha: 1)))
             .onDisappear {
                 vm.firestoreListener?.remove()
             }
@@ -149,6 +150,7 @@ extension ChatLogView {
         }
         .padding(6)
         .padding(.horizontal, 6)
+        .background(Color.white)
     }
 }
 

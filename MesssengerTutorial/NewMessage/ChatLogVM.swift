@@ -25,6 +25,7 @@ class ChatLogVM: ObservableObject {
     
     var firestoreListener: ListenerRegistration?
     var firebaseDeleteListener: ListenerRegistration?
+    var firebaseRecentListener: ListenerRegistration?
     
     func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
@@ -140,9 +141,10 @@ class ChatLogVM: ObservableObject {
                     return
                 }
             }
+            
     }
     
-    func deleteChatLog() {
+    func deleteChatLog(at offsets: IndexSet?  = nil) {
         guard let toId = chatUser?.uid else { return }
         guard let currentUser = FirebaseManager.shared.currentUser else { return }
         
@@ -160,29 +162,9 @@ class ChatLogVM: ObservableObject {
                     return message.documentId == document.reference.documentID
                 }) {
                     self.mainVM.recentMessages.remove(at: index)
-                    print(self.mainVM.recentMessages)
                     document.reference.delete()
-                    print("DEBUG: recent deleted")
                 }
             }
-//            .addSnapshotListener { snapshot, error in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                    return
-//                }
-//
-//                snapshot?.documentChanges.forEach({ change in
-//                    let docId = change.document.documentID
-//
-//                    if let index = self.mainVM.recentMessages.firstIndex(where: { message in
-//                        return message.documentId == docId
-//                    }) {
-//                        self.mainVM.recentMessages.remove(at: index)
-//                        change.document.reference.delete()
-//                        // figure out how to update firestore here
-//                    }
-//                })
-//            }
         
         FirebaseManager.shared.firestore
             .collection("messages")
@@ -198,5 +180,6 @@ class ChatLogVM: ObservableObject {
                     }
                 }
             }
+        // Try to figure out how to delete from firestore when swiping to delete. Code reflects app deletion, but still in firestore? Double check that
     }
 }
