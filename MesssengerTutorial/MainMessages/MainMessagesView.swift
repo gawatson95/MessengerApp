@@ -95,7 +95,7 @@ extension MainMessagesView {
             Button {
                 shouldShowLogOutOptions.toggle()
             } label: {
-                Image(systemName: "gear")
+                Image(systemName: "rectangle.portrait.and.arrow.right")
                     .resizable()
                     .foregroundColor(Color.theme.white)
                     .frame(width: 25, height: 25)
@@ -182,10 +182,12 @@ extension MainMessagesView {
     }
     
     func delete(at offsets: IndexSet) {
-        print(mainVM.recentMessages)
-        mainVM.recentMessages.remove(atOffsets: offsets)
-        chatVM.deleteChatLog(at: offsets)
-        print(mainVM.recentMessages)
+        for i in offsets.makeIterator() {
+            let newRecent = mainVM.recentMessages[i]
+            chatVM.chatUser = ChatUser(uid: newRecent.id, username: newRecent.username, email: "", profileImageUrl: newRecent.profileImageUrl)
+            mainVM.recentMessages.remove(atOffsets: offsets)
+            chatVM.deleteChatLog()
+        }
     }
 }
 

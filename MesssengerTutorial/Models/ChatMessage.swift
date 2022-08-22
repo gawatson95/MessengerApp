@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import SwiftUI
 
 struct ChatMessage: Identifiable, Hashable {
     var id: String { documentId }

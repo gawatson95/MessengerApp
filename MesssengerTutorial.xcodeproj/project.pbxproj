@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C031A63E28B3D51A00A9F75C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C031A63D28B3D51A00A9F75C /* GoogleService-Info.plist */; };
 		C053389E289448320002389B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389D289448320002389B /* ImagePicker.swift */; };
 		C05338A028944FAA0002389B /* ChatLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389F28944FA90002389B /* ChatLogVM.swift */; };
 		C05338A2289465A40002389B /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05338A1289465A40002389B /* ChatMessage.swift */; };
@@ -15,7 +16,6 @@
 		C06A24BB2877789700CF3F7D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06A24BA2877789700CF3F7D /* LoginView.swift */; };
 		C06A24BD2877789A00CF3F7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C06A24BC2877789A00CF3F7D /* Assets.xcassets */; };
 		C06A24C02877789A00CF3F7D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C06A24BF2877789A00CF3F7D /* Preview Assets.xcassets */; };
-		C06A24D028778D0700CF3F7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C06A24CF28778D0700CF3F7D /* GoogleService-Info.plist */; };
 		C072AD582881C6430023B621 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072AD572881C6430023B621 /* UserService.swift */; };
 		C072AD5D2881D3D30023B621 /* LoginVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072AD5C2881D3D30023B621 /* LoginVM.swift */; };
 		C072AD5F2881D7E10023B621 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C072AD5E2881D7E10023B621 /* ImageUploader.swift */; };
@@ -39,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C031A63D28B3D51A00A9F75C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C032C8A1289B1D8800EF7848 /* MesssengerTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MesssengerTutorial.entitlements; sourceTree = "<group>"; };
 		C032C8A2289B1D8D00EF7848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C053389D289448320002389B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -50,7 +51,6 @@
 		C06A24BA2877789700CF3F7D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C06A24BC2877789A00CF3F7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C06A24BF2877789A00CF3F7D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		C06A24CF28778D0700CF3F7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C072AD572881C6430023B621 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		C072AD5C2881D3D30023B621 /* LoginVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVM.swift; sourceTree = "<group>"; };
 		C072AD5E2881D7E10023B621 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 				C0E63110288F298200CEC515 /* NewMessage */,
 				C072AD592881C6DD0023B621 /* Login */,
 				C06A24BC2877789A00CF3F7D /* Assets.xcassets */,
-				C06A24CF28778D0700CF3F7D /* GoogleService-Info.plist */,
+				C031A63D28B3D51A00A9F75C /* GoogleService-Info.plist */,
 				C06A24BE2877789A00CF3F7D /* Preview Content */,
 				C0C425B028998E5A00589248 /* Launch Screen.storyboard */,
 			);
@@ -267,9 +267,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C06A24C02877789A00CF3F7D /* Preview Assets.xcassets in Resources */,
+				C031A63E28B3D51A00A9F75C /* GoogleService-Info.plist in Resources */,
 				C06A24BD2877789A00CF3F7D /* Assets.xcassets in Resources */,
 				C0C425B128998E5A00589248 /* Launch Screen.storyboard in Resources */,
-				C06A24D028778D0700CF3F7D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

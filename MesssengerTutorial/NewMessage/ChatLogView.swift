@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ChatLogView: View {
     
@@ -16,6 +17,9 @@ struct ChatLogView: View {
     @Namespace var bottomId
     
     @State private var confirmDeleteDialog: Bool = false
+    @State private var showImagePicker: Bool = false
+    @State var image: UIImage?
+    @State var imageMessage: Image?
     
     let chatUser: ChatUser?
     
@@ -69,7 +73,6 @@ struct ChatLogView: View {
                     .navigationBarTitleDisplayMode(.inline)
                 }
                 
-                
                 bottomChatBar
             }
             .background(Color(.init(white: 0.95, alpha: 1)))
@@ -101,7 +104,7 @@ extension ChatLogView {
     private var bottomChatBar: some View {
         HStack {
             Button {
-                // ImagePicker
+                showImagePicker.toggle()
             } label: {
                 Image(systemName: "photo.on.rectangle.angled")
                     .resizable()
@@ -139,7 +142,7 @@ extension ChatLogView {
             .onPreferenceChange(ViewHeightKey.self) { dynamicHeight = $0 }
 
             Button {
-                vm.handleSend()
+                vm.handleSend(image: image)
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .resizable()
@@ -151,6 +154,14 @@ extension ChatLogView {
         .padding(6)
         .padding(.horizontal, 6)
         .background(Color.white)
+        .fullScreenCover(isPresented: $showImagePicker, onDismiss: loadImage) {
+            ImagePicker(image: $image)
+        }
+    }
+    
+    func loadImage() {
+        guard let image = image else { return }
+        imageMessage = Image(uiImage: image)
     }
 }
 

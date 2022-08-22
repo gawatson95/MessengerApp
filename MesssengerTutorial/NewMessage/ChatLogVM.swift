@@ -13,6 +13,7 @@ class ChatLogVM: ObservableObject {
     
     @Published var messageText: String = ""
     @Published var chatMessages = [ChatMessage]()
+    @Published var imageURL: String?
     
     var chatUser: ChatUser?
     @ObservedObject var mainVM: MainMessagesVM
@@ -53,26 +54,53 @@ class ChatLogVM: ObservableObject {
             }
     }
     
-    func handleSend() {
+    func handleSend(image: UIImage?) {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
-        
         guard let toId = chatUser?.uid else { return }
         
+        if let image = image {
+            guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+            
+            let ref = FirebaseManager.shared.storage.reference(withPath: UUID().uuidString)
+            
+            ref.putData(imageData, metadata: nil) { _, error in
+                if let error = error {
+                    print("DEBUG: Failed to upload image: \(error.localizedDescription)")
+                    return
+                }
+                
+                ref.downloadURL { url, error in
+                    if let error = error {
+                        print("DEBUG: Failed to download image URL: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self.imageURL = url?.absoluteString
+                    
+                    print("DEBUG: Successfully uploaded image: \(url?.absoluteString ?? "")")
+                }
+            }
+        }
+            
         let document = FirebaseManager.shared.firestore
             .collection("messages")
             .document(fromId)
             .collection(toId)
             .document()
         
+        print("DEBUG: \(imageURL)")
+        
         let messageData = ["fromId": fromId, "toId": toId, "text": self.messageText, "timestamp": Timestamp()] as [String : Any]
+    
+        let imageMessageData = ["fromId": fromId, "toId": toId, "text": self.imageURL ?? self.messageText, "timestamp": Timestamp()] as [String : Any]
         
-        document.setData(messageData) { error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        document.setData(imageURL != nil ? imageMessageData : messageData) { error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
             }
-        }
-        
+            
         persistRecentMessage()
         
         let recipientDocument = FirebaseManager.shared.firestore
@@ -81,7 +109,7 @@ class ChatLogVM: ObservableObject {
             .collection(fromId)
             .document()
         
-        recipientDocument.setData(messageData) { error in
+        recipientDocument.setData(imageURL != nil ? imageMessageData : messageData) { error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -144,7 +172,7 @@ class ChatLogVM: ObservableObject {
             
     }
     
-    func deleteChatLog(at offsets: IndexSet?  = nil) {
+    func deleteChatLog() {
         guard let toId = chatUser?.uid else { return }
         guard let currentUser = FirebaseManager.shared.currentUser else { return }
         
