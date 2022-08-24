@@ -142,7 +142,13 @@ extension ChatLogView {
             .onPreferenceChange(ViewHeightKey.self) { dynamicHeight = $0 }
 
             Button {
-                vm.handleSend(image: image)
+                if let image = image {
+                    Task {
+                        await vm.handleImageSend(image: image)
+                    }
+                } else {
+                    vm.handleSend()
+                }
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .resizable()
