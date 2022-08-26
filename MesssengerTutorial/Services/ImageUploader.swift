@@ -35,29 +35,16 @@ struct ImageUploader {
         }
     }
     
-    static func sendImage(image: UIImage) async -> String? {
-        
-        var imageURL: String
+    static func sendImage(image: UIImage, completion: @escaping(String) -> ()) {
         
         if let imageData = image.jpegData(compressionQuality: 0.5) {
             let ref = FirebaseManager.shared.storage.reference(withPath: UUID().uuidString)
-            ref.putData(imageData, metadata: nil) { _, error in
-                if let error = error {
-                    print("DEBUG: Failed to upload image: \(error.localizedDescription)")
-                    return
-                }
-                ref.downloadURL { url, error in
-                    if let error = error {
-                        print("DEBUG: Failed to download image URL: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    print("DEBUG: Successfully uploaded image: \(url?.absoluteString ?? "")")
-                    guard let url = url else { return }
-                    
+            ref.putData(imageData) { _ in
+                ref.downloadURL { url, _ in
+                    guard let url = url?.absoluteString else { return }
+                    completion(url)
                 }
             }
         }
-        return self.imageURL
     }
 }

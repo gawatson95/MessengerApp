@@ -143,9 +143,7 @@ extension ChatLogView {
 
             Button {
                 if let image = image {
-                    Task {
-                        await vm.handleImageSend(image: image)
-                    }
+                    vm.handleImageSend(image: image)
                 } else {
                     vm.handleSend()
                 }

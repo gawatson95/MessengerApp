@@ -13,9 +13,9 @@ class ChatLogVM: ObservableObject {
     
     @Published var messageText: String = ""
     @Published var chatMessages = [ChatMessage]()
-    @Published var imageURL: String?
     
     var messageIsAnImage: Bool = false
+    var imageURL: String = ""
     
     var chatUser: ChatUser?
     @ObservedObject var mainVM: MainMessagesVM
@@ -93,17 +93,15 @@ class ChatLogVM: ObservableObject {
         messageText = ""
     }
     
-    func handleImageSend(image: UIImage?) async {
+    func handleImageSend(image: UIImage?) {
         
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let chatUser = chatUser else { return }
-        //guard let toId = chatUser.uid else { return }
+        guard let image = image else { return }
         
-        if let image = image {
-            await ImageUploader.sendImage(image: image, completion: { url in
-                self.imageURL = url
-                print(url)
-            })
+        ImageUploader.sendImage(image: image) { url in
+            self.imageURL = url
+            print("DEBUG: IU URL \(self.imageURL)")
         }
             
         let document = FirebaseManager.shared.firestore
@@ -121,13 +119,11 @@ class ChatLogVM: ObservableObject {
         }
         
         document.setData(imageMessageData) { error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
-                }
+            if let error = error {
+                print(error.localizedDescription)
+                return
             }
-        
-//        try? await document.setData(imageURL != nil ? imageMessageData : messageData)
+        }
         
         persistRecentMessage()
         
