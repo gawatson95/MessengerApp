@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C01783E428B96E7900F50E49 /* FullScreenImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01783E328B96E7900F50E49 /* FullScreenImageView.swift */; };
 		C031A63E28B3D51A00A9F75C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C031A63D28B3D51A00A9F75C /* GoogleService-Info.plist */; };
 		C053389E289448320002389B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389D289448320002389B /* ImagePicker.swift */; };
 		C05338A028944FAA0002389B /* ChatLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C053389F28944FA90002389B /* ChatLogVM.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C01783E328B96E7900F50E49 /* FullScreenImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenImageView.swift; sourceTree = "<group>"; };
 		C031A63D28B3D51A00A9F75C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C032C8A1289B1D8800EF7848 /* MesssengerTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MesssengerTutorial.entitlements; sourceTree = "<group>"; };
 		C032C8A2289B1D8D00EF7848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				C0E63111288F299600CEC515 /* NewMessageView.swift */,
 				C060D7EC2891C670007BB912 /* ChatLogView.swift */,
 				C053389F28944FA90002389B /* ChatLogVM.swift */,
+				C01783E328B96E7900F50E49 /* FullScreenImageView.swift */,
 			);
 			path = NewMessage;
 			sourceTree = "<group>";
@@ -284,6 +287,7 @@
 				C072AD612881DD860023B621 /* ContentView.swift in Sources */,
 				C09CA577289709D9009A0178 /* RecentMessage.swift in Sources */,
 				C05338A028944FAA0002389B /* ChatLogVM.swift in Sources */,
+				C01783E428B96E7900F50E49 /* FullScreenImageView.swift in Sources */,
 				C0758DE128A1699D0017C708 /* NotificationService.swift in Sources */,
 				C0960DC92880C21A00674ED0 /* FirebaseManager.swift in Sources */,
 				C0960DC42880B63900674ED0 /* MainMessagesView.swift in Sources */,

@@ -93,26 +93,18 @@ class ChatLogVM: ObservableObject {
         messageText = ""
     }
     
-    func handleImageSend(image: UIImage?) {
+    func handleImageSend(url: String) {
         
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
         guard let chatUser = chatUser else { return }
-        guard let image = image else { return }
-        
-        ImageUploader.sendImage(image: image) { url in
-            self.imageURL = url
-            print("DEBUG: IU URL \(self.imageURL)")
-        }
             
         let document = FirebaseManager.shared.firestore
             .collection("messages")
             .document(fromId)
             .collection(chatUser.uid)
             .document()
-        
-        print("DEBUG: \(imageURL)")
 
-        let imageMessageData = ["fromId": fromId, "toId": chatUser.uid, "text": imageURL, "timestamp": Timestamp()] as [String : Any]
+        let imageMessageData = ["fromId": fromId, "toId": chatUser.uid, "text": url, "timestamp": Timestamp()] as [String : Any]
         
         if !imageMessageData.isEmpty {
             messageIsAnImage.toggle()

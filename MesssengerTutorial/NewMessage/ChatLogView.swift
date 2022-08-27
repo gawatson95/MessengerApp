@@ -20,6 +20,11 @@ struct ChatLogView: View {
     @State private var showImagePicker: Bool = false
     @State var image: UIImage?
     @State var imageMessage: Image?
+    @State private var toggleTextEditor: Bool = false
+    @State var imageURL: String = ""
+    
+    
+    @State var showFullScreenImage: Bool = false
     
     let chatUser: ChatUser?
     
@@ -37,12 +42,26 @@ struct ChatLogView: View {
                     ScrollViewReader { scroll in
                         ForEach(vm.chatMessages) { message in
                             LazyVStack {
-                                Text(message.text)
-                                    .foregroundColor(message.fromId == user.uid ? Color.theme.accent : .white)
-                                    .padding(12)
-                                    .background(message.fromId == user.uid ? Color.white : Color.theme.background)
-                                    .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
+                                if message.text.hasPrefix("https://firebasestorage") {
+                                    KFImage(URL(string: message.text))
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        .frame(maxHeight: 175)
+                                        .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
+                                        .onTapGesture {
+                                            imageURL = message.text
+                                            print(imageURL)
+                                            showFullScreenImage.toggle()
+                                        }
+                                } else {
+                                    Text(message.text)
+                                        .foregroundColor(message.fromId == user.uid ? Color.theme.accent : .white)
+                                        .padding(12)
+                                        .background(message.fromId == user.uid ? Color.white : Color.theme.background)
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
+                                }
                             }
                             .padding(.horizontal, 8)
                         }
@@ -75,6 +94,10 @@ struct ChatLogView: View {
                 
                 bottomChatBar
             }
+            .fullScreenCover(isPresented: $showFullScreenImage, content: {
+                let imageURL = imageURL
+                FullScreenImageView(imageURL: imageURL)
+            })
             .background(Color(.init(white: 0.95, alpha: 1)))
             .onDisappear {
                 vm.firestoreListener?.remove()
@@ -123,12 +146,27 @@ extension ChatLogView {
                                                value: $0.frame(in: .local).size.height)
                     })
                 
-                TextEditor(text: $vm.messageText)
-                    .padding(.leading, 10)
-                    .font(.system(.body))
-                    .frame(height: max(40,dynamicHeight))
+                if imageMessage == nil {
+                    TextEditor(text: $vm.messageText)
+                        .padding(.leading, 10)
+                        .font(.system(.body))
+                        .frame(height: max(40,dynamicHeight))
+                }
                 
-                if vm.messageText.isEmpty {
+                if imageMessage != nil {
+                    if let imageMessage = imageMessage {
+                        imageMessage
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                            .frame(height: 175)
+                            .background(GeometryReader {
+                                Color.clear.preference(key: ViewHeightKey.self,
+                                                       value: $0.frame(in: .local).size.height)
+                            })
+                            .padding(.leading, 10)
+                    }
+                } else if vm.messageText.isEmpty {
                     Text("Message")
                         .padding(.leading)
                         .foregroundColor(Color.gray.opacity(0.3))
@@ -143,10 +181,15 @@ extension ChatLogView {
 
             Button {
                 if let image = image {
-                    vm.handleImageSend(image: image)
+                    ImageUploader.sendImage(image: image) { url in
+                        let imageURL = url
+                        vm.handleImageSend(url: imageURL)
+                    }
                 } else {
                     vm.handleSend()
                 }
+                image = nil
+                imageMessage = nil
             } label: {
                 Image(systemName: "arrow.up.circle.fill")
                     .resizable()
