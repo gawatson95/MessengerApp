@@ -10,15 +10,15 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class ChatLogVM: ObservableObject {
+    @ObservedObject var mainVM: MainMessagesVM
     
     @Published var messageText: String = ""
     @Published var chatMessages = [ChatMessage]()
     
     var messageIsAnImage: Bool = false
     var imageURL: String = ""
-    
+    var messageImageURL: String?
     var chatUser: ChatUser?
-    @ObservedObject var mainVM: MainMessagesVM
     
     init(chatUser: ChatUser?, mainVM: MainMessagesVM) {
         self.chatUser = chatUser
@@ -28,7 +28,6 @@ class ChatLogVM: ObservableObject {
     
     var firestoreListener: ListenerRegistration?
     var firebaseDeleteListener: ListenerRegistration?
-    var firebaseRecentListener: ListenerRegistration?
     
     func fetchMessages() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else { return }
@@ -137,19 +136,19 @@ class ChatLogVM: ObservableObject {
         
         guard let chatUser = chatUser else { return }
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
-        guard let toId = self.chatUser?.uid else { return }
+        guard let currentUser = FirebaseManager.shared.currentUser else { return }
         
         let document = FirebaseManager.shared.firestore
             .collection("recent_messages")
             .document(uid)
             .collection("messages")
-            .document(toId)
+            .document(chatUser.uid)
         
         let data = [
             "timestamp": Timestamp(),
-            "text": messageIsAnImage == true ? "\(chatUser.username) sent an image" : self.messageText,
+            "text": messageIsAnImage && chatUser.username != currentUser.username ? "You sent an image" : self.messageText,
             "fromId": uid,
-            "toId": toId,
+            "toId": chatUser.uid,
             "profileImageUrl": chatUser.profileImageUrl,
             "username": chatUser.username
         ] as [String: Any]
@@ -161,20 +160,18 @@ class ChatLogVM: ObservableObject {
             }
         }
         
-        guard let currentUser = FirebaseManager.shared.currentUser else { return }
-        
         let recipientRecentMessage = [
             "timestamp": Timestamp(),
-            "text": self.messageText,
+            "text": messageIsAnImage ? "\(currentUser.username) sent an image" : self.messageText,
             "fromId": uid,
-            "toId": toId,
+            "toId": chatUser.uid,
             "profileImageUrl": currentUser.profileImageUrl,
             "username": currentUser.username
         ] as [String: Any]
         
         FirebaseManager.shared.firestore
             .collection("recent_messages")
-            .document(toId)
+            .document(chatUser.uid)
             .collection("messages")
             .document(currentUser.uid)
             .setData(recipientRecentMessage) { error in
@@ -198,7 +195,7 @@ class ChatLogVM: ObservableObject {
             .document(toId)
             .addSnapshotListener { snapshot, error in
                 guard let document = snapshot else { return }
-
+                
                 if let index = self.mainVM.recentMessages.firstIndex(where: { message in
                     return message.documentId == document.reference.documentID
                 }) {
@@ -221,5 +218,23 @@ class ChatLogVM: ObservableObject {
                     }
                 }
             }
+        
+        let path = currentUser.uid + "/" + toId
+        FirebaseManager.shared.storage
+            .reference()
+            .child(path)
+            .listAll(completion: { result, _ in
+                guard let result = result else { return }
+                    for item in result.items {
+                        item.delete { error in
+                            if let error = error {
+                                print(error.localizedDescription)
+                            } else {
+                                print("DEBUG: Sucessfully deleted")
+                            }
+                        }
+                    
+                }
+            })
     }
 }

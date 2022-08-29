@@ -10,6 +10,7 @@ import FirebaseStorage
 import FirebaseFirestore
 
 struct ImageUploader {
+    
     static func uploadImage(image: UIImage, userUid uid: String, completion: @escaping(String) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
         
@@ -35,9 +36,12 @@ struct ImageUploader {
         }
     }
     
-    static func sendImage(image: UIImage, completion: @escaping(String) -> ()) {
+    static func sendImage(userID: String, toID: String, image: UIImage, completion: @escaping(String) -> ()) {
         
         if let imageData = image.jpegData(compressionQuality: 0.5) {
+            let fer = FirebaseManager.shared.storage.reference().child(userID + "/" + toID + "/" + UUID().uuidString)
+            fer.putData(imageData)
+                
             let ref = FirebaseManager.shared.storage.reference(withPath: UUID().uuidString)
             ref.putData(imageData) { _ in
                 ref.downloadURL { url, _ in

@@ -11,29 +11,53 @@ import Kingfisher
 struct FullScreenImageView: View {
     
     @Environment(\.dismiss) var dismiss
-    @State var imageURL: String
+    @ObservedObject var vm: ChatLogVM
+    
+    @State private var toggleNavigationBarHide: Bool = false
     
     var body: some View {
         NavigationView {
-            KFImage(URL(string: imageURL))
-                .resizable()
-                .scaledToFit()
-                
-            .navigationTitle("Image")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
+            if let messageImageURL = vm.messageImageURL {
+                if #available(iOS 16.0, *) {
+                    KFImage(URL(string: messageImageURL))
+                        .resizable()
+                        .scaledToFit()
+                        .onTapGesture {
+                            withAnimation {
+                                toggleNavigationBarHide.toggle()
+                            }
+                        }
+                        .navigationTitle("Image")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    dismiss()
+                                }
+                            }
+                        }
+                        .toolbar(toggleNavigationBarHide ? .hidden : .visible)
+                } else {
+                    KFImage(URL(string: messageImageURL))
+                        .resizable()
+                        .scaledToFit()
+                        .onTapGesture {
+                            withAnimation {
+                                toggleNavigationBarHide.toggle()
+                            }
+                        }
+                        .navigationTitle("Image")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationBarHidden(toggleNavigationBarHide)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    dismiss()
+                                }
+                            }
+                        }
                 }
             }
         }
-    }
-}
-
-struct FullScreenImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        FullScreenImageView(imageURL: "https://images.unsplash.com/photo-1661503390019-86b9193edb4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1281&q=80")
     }
 }

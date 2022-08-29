@@ -11,20 +11,16 @@ import Kingfisher
 struct ChatLogView: View {
     
     @Environment(\.dismiss) var dismiss
-    
     @ObservedObject var vm: ChatLogVM
+    @Namespace private var bottomId
     
-    @Namespace var bottomId
-    
+    @State private var dynamicHeight: CGFloat = 0.0
     @State private var confirmDeleteDialog: Bool = false
     @State private var showImagePicker: Bool = false
-    @State var image: UIImage?
-    @State var imageMessage: Image?
     @State private var toggleTextEditor: Bool = false
-    @State var imageURL: String = ""
-    
-    
-    @State var showFullScreenImage: Bool = false
+    @State private var showFullScreenImage: Bool = false
+    @State private var image: UIImage?
+    @State private var imageMessage: Image?
     
     let chatUser: ChatUser?
     
@@ -32,8 +28,6 @@ struct ChatLogView: View {
         self.chatUser = chatUser
         self.vm = .init(chatUser: chatUser, mainVM: mainVM)
     }
-    
-    @State private var dynamicHeight: CGFloat = 0.0
     
     var body: some View {
         if let user = vm.chatUser {
@@ -50,8 +44,7 @@ struct ChatLogView: View {
                                         .frame(maxHeight: 175)
                                         .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
                                         .onTapGesture {
-                                            imageURL = message.text
-                                            print(imageURL)
+                                            vm.messageImageURL = message.text
                                             showFullScreenImage.toggle()
                                         }
                                 } else {
@@ -95,8 +88,7 @@ struct ChatLogView: View {
                 bottomChatBar
             }
             .fullScreenCover(isPresented: $showFullScreenImage, content: {
-                let imageURL = imageURL
-                FullScreenImageView(imageURL: imageURL)
+                FullScreenImageView(vm: vm)
             })
             .background(Color(.init(white: 0.95, alpha: 1)))
             .onDisappear {
@@ -155,16 +147,31 @@ extension ChatLogView {
                 
                 if imageMessage != nil {
                     if let imageMessage = imageMessage {
-                        imageMessage
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .frame(height: 175)
-                            .background(GeometryReader {
-                                Color.clear.preference(key: ViewHeightKey.self,
-                                                       value: $0.frame(in: .local).size.height)
-                            })
-                            .padding(.leading, 10)
+                        ZStack(alignment: .topTrailing) {
+                            imageMessage
+                                .resizable()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .frame(height: 175)
+                                .background(GeometryReader {
+                                    Color.clear.preference(key: ViewHeightKey.self,
+                                                           value: $0.frame(in: .local).size.height)
+                                })
+                            Circle()
+                                .foregroundColor(.white)
+                                .frame(width: 20, height: 20)
+                                .overlay(content: {
+                                    Image(systemName: "x.circle.fill")
+                                        .foregroundColor(.gray)
+                                })
+                                .padding(1)
+                                .onTapGesture {
+                                    self.imageMessage = nil
+                                    image = nil
+                                }
+                                .padding(5)
+                        }
+                        .padding(.leading, 10)
                     }
                 } else if vm.messageText.isEmpty {
                     Text("Message")
@@ -181,9 +188,10 @@ extension ChatLogView {
 
             Button {
                 if let image = image {
-                    ImageUploader.sendImage(image: image) { url in
-                        let imageURL = url
-                        vm.handleImageSend(url: imageURL)
+                    guard let userID = FirebaseManager.shared.auth.currentUser?.uid else { return }
+                    guard let toID = vm.chatUser?.uid else { return }
+                    ImageUploader.sendImage(userID: userID, toID: toID, image: image) { url in
+                        vm.handleImageSend(url: url)
                     }
                 } else {
                     vm.handleSend()
@@ -196,6 +204,7 @@ extension ChatLogView {
                     .foregroundColor(Color.theme.background)
                     .scaledToFit()
                     .frame(width: 25)
+                    
             }
         }
         .padding(6)
@@ -218,3 +227,4 @@ struct ViewHeightKey: PreferenceKey {
         value = value + nextValue()
     }
 }
+ 
