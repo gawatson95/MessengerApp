@@ -48,7 +48,7 @@
 		C053389F28944FA90002389B /* ChatLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogVM.swift; sourceTree = "<group>"; };
 		C05338A1289465A40002389B /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		C060D7EC2891C670007BB912 /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
-		C06A24B52877789700CF3F7D /* MesssengerTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MesssengerTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C06A24B52877789700CF3F7D /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06A24B82877789700CF3F7D /* MesssengerTutorialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesssengerTutorialApp.swift; sourceTree = "<group>"; };
 		C06A24BA2877789700CF3F7D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C06A24BC2877789A00CF3F7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 		C06A24B62877789700CF3F7D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C06A24B52877789700CF3F7D /* MesssengerTutorial.app */,
+				C06A24B52877789700CF3F7D /* Messenger.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,9 +201,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C06A24B42877789700CF3F7D /* MesssengerTutorial */ = {
+		C06A24B42877789700CF3F7D /* Messenger */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C06A24C32877789A00CF3F7D /* Build configuration list for PBXNativeTarget "MesssengerTutorial" */;
+			buildConfigurationList = C06A24C32877789A00CF3F7D /* Build configuration list for PBXNativeTarget "Messenger" */;
 			buildPhases = (
 				C06A24B12877789700CF3F7D /* Sources */,
 				C06A24B22877789700CF3F7D /* Frameworks */,
@@ -213,7 +213,7 @@
 			);
 			dependencies = (
 			);
-			name = MesssengerTutorial;
+			name = Messenger;
 			packageProductDependencies = (
 				C072AD632881FE1F0023B621 /* Kingfisher */,
 				C0C8B565289B2C6600665F0A /* FirebaseAnalytics */,
@@ -224,7 +224,7 @@
 				C0E0349D28A6EEDA005C534E /* FirebaseFirestoreSwift */,
 			);
 			productName = MesssengerTutorial;
-			productReference = C06A24B52877789700CF3F7D /* MesssengerTutorial.app */;
+			productReference = C06A24B52877789700CF3F7D /* Messenger.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -242,7 +242,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C06A24B02877789700CF3F7D /* Build configuration list for PBXProject "MesssengerTutorial" */;
+			buildConfigurationList = C06A24B02877789700CF3F7D /* Build configuration list for PBXProject "Messenger" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -259,7 +259,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C06A24B42877789700CF3F7D /* MesssengerTutorial */,
+				C06A24B42877789700CF3F7D /* Messenger */,
 			);
 		};
 /* End PBXProject section */
@@ -493,7 +493,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C06A24B02877789700CF3F7D /* Build configuration list for PBXProject "MesssengerTutorial" */ = {
+		C06A24B02877789700CF3F7D /* Build configuration list for PBXProject "Messenger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C06A24C12877789A00CF3F7D /* Debug */,
@@ -502,7 +502,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C06A24C32877789A00CF3F7D /* Build configuration list for PBXNativeTarget "MesssengerTutorial" */ = {
+		C06A24C32877789A00CF3F7D /* Build configuration list for PBXNativeTarget "Messenger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C06A24C42877789A00CF3F7D /* Debug */,
