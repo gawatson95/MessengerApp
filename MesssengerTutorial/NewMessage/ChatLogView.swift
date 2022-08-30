@@ -36,24 +36,32 @@ struct ChatLogView: View {
                     ScrollViewReader { scroll in
                         ForEach(vm.chatMessages) { message in
                             LazyVStack {
-                                if message.text.hasPrefix("https://firebasestorage") {
-                                    KFImage(URL(string: message.text))
-                                        .resizable()
-                                        .scaledToFit()
-                                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                                        .frame(maxHeight: 175)
-                                        .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
-                                        .onTapGesture {
-                                            vm.messageImageURL = message.text
-                                            showFullScreenImage.toggle()
+                                HStack {
+                                    if message.fromId != user.uid {
+                                        Spacer()
+                                    }
+                                        if message.text.hasPrefix("https://firebasestorage") {
+                                            KFImage(URL(string: message.text))
+                                                .resizable()
+                                                .scaledToFit()
+                                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                                .frame(maxHeight: 175)
+                                                .frame(maxWidth: UIScreen.main.bounds.width / 1.3, alignment: message.fromId == user.uid ? .leading : .trailing)
+                                                .onTapGesture {
+                                                    vm.messageImageURL = message.text
+                                                    showFullScreenImage.toggle()
+                                                }
+                                        } else {
+                                            Text(message.text)
+                                                .foregroundColor(message.fromId == user.uid ? Color.theme.accent : .white)
+                                                .padding(12)
+                                                .background(message.fromId == user.uid ? Color.white : Color.theme.background)
+                                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                                .frame(maxWidth: UIScreen.main.bounds.width / 1.3 , alignment: message.fromId == user.uid ? .leading : .trailing)
                                         }
-                                } else {
-                                    Text(message.text)
-                                        .foregroundColor(message.fromId == user.uid ? Color.theme.accent : .white)
-                                        .padding(12)
-                                        .background(message.fromId == user.uid ? Color.white : Color.theme.background)
-                                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                                        .frame(maxWidth: .infinity, alignment: message.fromId == user.uid ? .leading : .trailing)
+                                    if message.fromId == user.uid {
+                                        Spacer()
+                                    }
                                 }
                             }
                             .padding(.horizontal, 8)
@@ -127,6 +135,7 @@ extension ChatLogView {
                     .frame(width: 25)
                     .foregroundColor(.gray)
             }
+            .frame(height: dynamicHeight, alignment: .bottom)
             
             ZStack(alignment: .leading) {
                 Text(vm.messageText)
@@ -206,6 +215,7 @@ extension ChatLogView {
                     .frame(width: 25)
                     
             }
+            .frame(height: dynamicHeight, alignment: .bottom)
         }
         .padding(6)
         .padding(.horizontal, 6)

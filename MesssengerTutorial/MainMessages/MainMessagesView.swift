@@ -133,20 +133,22 @@ extension MainMessagesView {
                                     .padding(.vertical, 3)
                                 
                                 VStack(alignment: .leading, spacing: 5) {
-                                    Text(message.username)
-                                        .bold()
-                                        .foregroundColor(Color.theme.accent)
+                                    HStack {
+                                        Text(message.username)
+                                            .bold()
+                                            .foregroundColor(Color.theme.accent)
+                                        
+                                        Spacer()
+                                        
+                                        Text("\(message.formattedTime)")
+                                            .foregroundColor(.gray)
+                                            .font(.callout)
+                                    }
                                     Text(message.text)
                                         .font(.callout)
                                         .foregroundColor(.gray)
                                         .lineLimit(2)
                                 }
-                                
-                                Spacer()
-                                
-                                Text("\(message.formattedTime)")
-                                    .foregroundColor(.gray)
-                                    .font(.callout)
                             }
                         }
                     }
