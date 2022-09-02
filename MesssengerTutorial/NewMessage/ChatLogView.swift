@@ -132,8 +132,9 @@ extension ChatLogView {
                 Image(systemName: "photo.on.rectangle.angled")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 25)
+                    .frame(width: 30)
                     .foregroundColor(.gray)
+                    .padding(.bottom, 5)
             }
             .frame(height: dynamicHeight, alignment: .bottom)
             
@@ -213,6 +214,7 @@ extension ChatLogView {
                     .foregroundColor(Color.theme.background)
                     .scaledToFit()
                     .frame(width: 25)
+                    .padding(.bottom, 5)
                     
             }
             .frame(height: dynamicHeight, alignment: .bottom)
